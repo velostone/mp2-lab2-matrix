@@ -27,7 +27,7 @@ public:
   {
     if (sz == 0)
       throw out_of_range("Vector size should be greater than zero");
-    pMem = new T[sz]();// {}; // У типа T д.б. констуктор по умолчанию
+    pMem = new T[sz]();// {}; // У типа T д.б. конструктор по умолчанию
   }
   TDynamicVector(T* arr, size_t s) : sz(s)
   {
@@ -49,6 +49,7 @@ public:
   }
   TDynamicVector& operator=(TDynamicVector&& v) noexcept
   {
+      return (*this); // заглушка
   }
 
   size_t size() const noexcept { return sz; }
