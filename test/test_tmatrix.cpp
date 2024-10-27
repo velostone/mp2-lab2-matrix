@@ -51,11 +51,11 @@ TEST(TDynamicMatrix, can_get_size)
 TEST(TDynamicMatrix, can_set_and_get_element)
 {
 	TDynamicMatrix<int> m(5);
-	int* arr = new int[5] { 1, 0, 0, 0, 0 };
+	int* arr = new int[5] { 1, 1, 0, 0, 1 };
 	TDynamicVector<int> v(arr, 5);
 	delete[] arr;
 
-	m[0][0] = 1;
+	m[0] = v;
 
 	EXPECT_EQ(v, m[0]);
 }
