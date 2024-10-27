@@ -169,7 +169,7 @@ public:
   {
 	  if (sz != v.sz)
 		  throw logic_error("Vectors should be the same size");
-	  T sum = 0;
+	  T sum{ };
 	  for (size_t i = 0; i < sz; i++)
 		  sum += pMem[i] * v.pMem[i];
 	  return sum;
@@ -220,10 +220,14 @@ public:
   // сравнение
   bool operator==(const TDynamicMatrix& m) const noexcept
   {
-	  for (size_t i = 0; i < sz; i++)
-		  if (pMem[i] != m.pMem[i])
-			  return 0;
-	  return 1;
+	  if (sz == m.sz)
+	  {
+		  for (size_t i = 0; i < sz; i++)
+			  if (pMem[i] != m.pMem[i])
+				  return 0;
+		  return 1;
+	  }
+	  else return 0;
   }
 
   bool operator!=(const TDynamicMatrix& m) const noexcept

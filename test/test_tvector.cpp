@@ -38,7 +38,7 @@ TEST(TDynamicVector, copied_vector_has_its_own_memory)
 	TDynamicVector<int> v(10);
 	TDynamicVector<int> vcpy(v);
 	
-  EXPECT_NE(&v[0], &vcpy[0]);
+  EXPECT_NE(&v, &vcpy);
 }
 
 TEST(TDynamicVector, can_get_size)
@@ -73,8 +73,12 @@ TEST(TDynamicVector, throws_when_set_element_with_too_large_index)
 TEST(TDynamicVector, can_assign_vector_to_itself)
 {
 	TDynamicVector<int> v(10);
+	v[0] = 1;
+	TDynamicVector<int> vcpy(v);
+	
+	v = v;
 
-  ASSERT_NO_THROW(v = v);
+  EXPECT_EQ(v, vcpy);
 }
 
 TEST(TDynamicVector, can_assign_vectors_of_equal_size)
@@ -187,11 +191,21 @@ TEST(TDynamicVector, can_add_vectors_with_equal_size)
 	for (size_t i = 0; i < 5; i++)
 		v1[i] = 10;
 	// v1 = (10, 10, 10, 10, 10)
+	for (size_t i = 0; i < 3; i++)
+		v2[i] = 5;
+	// v2 = (5, 5, 5, 0, 0)
+	TDynamicVector<int> res(5);
+	res[0] = 15;
+	res[1] = 15;
+	res[2] = 15;
+	res[3] = 10;
+	res[4] = 10;
+	// res = (15, 15, 15, 10, 10)
 
 	v2 = v1 + v2;
-	// v2 = (10, 10, 10, 10, 10)
+	// v2 = (15, 15, 15, 10, 10)
 
-	EXPECT_EQ(v1, v2);
+	EXPECT_EQ(res, v2);
 }
 
 TEST(TDynamicVector, cant_add_vectors_with_not_equal_size)
@@ -206,16 +220,22 @@ TEST(TDynamicVector, can_subtract_vectors_with_equal_size)
 {
 	TDynamicVector<int> v1(5);
 	TDynamicVector<int> v2(5);
-	TDynamicVector<int> res(5);
 	for (size_t i = 0; i < 5; i++)
-		res[i] = -5;
-	// res = (-5, -5, -5, -5, -5)
-	for (size_t i = 0; i < 5; i++)
+		v1[i] = 10;
+	// v1 = (10, 10, 10, 10, 10)
+	for (size_t i = 0; i < 3; i++)
 		v2[i] = 5;
-	// v2 = (5, 5, 5, 5, 5)
+	// v2 = (5, 5, 5, 0, 0)
+	TDynamicVector<int> res(5);
+	res[0] = 5;
+	res[1] = 5;
+	res[2] = 5;
+	res[3] = 10;
+	res[4] = 10;
+	// res = (5, 5, 5, 10, 10)
 
 	v1 = v1 - v2;
-	// v1 = (-5, -5, -5, -5, -5)
+	// v1 = (5, 5, 5, 10, 10)
 
 	EXPECT_EQ(res, v1);
 }

@@ -38,7 +38,7 @@ TEST(TDynamicMatrix, copied_matrix_has_its_own_memory)
   	TDynamicMatrix<int> m(5);
 	TDynamicMatrix<int> mcpy(m);
 
-  EXPECT_NE(&m[0], &mcpy[0]);
+  EXPECT_NE(&m, &mcpy);
 }
 
 TEST(TDynamicMatrix, can_get_size)
@@ -51,10 +51,13 @@ TEST(TDynamicMatrix, can_get_size)
 TEST(TDynamicMatrix, can_set_and_get_element)
 {
 	TDynamicMatrix<int> m(5);
+	int* arr = new int[5] { 1, 0, 0, 0, 0 };
+	TDynamicVector<int> v(arr, 5);
+	delete[] arr;
 
 	m[0][0] = 1;
 
-	EXPECT_EQ(1, m[0][0]);
+	EXPECT_EQ(v, m[0]);
 }
 
 TEST(TDynamicMatrix, throws_when_set_element_with_negative_index)
@@ -64,7 +67,7 @@ TEST(TDynamicMatrix, throws_when_set_element_with_negative_index)
 	TDynamicVector<int> v(arr, 5);
 	delete[] arr;
 
-	ASSERT_ANY_THROW(m.at(5) = v);
+	ASSERT_ANY_THROW(m.at(-5) = v);
 }
 
 TEST(TDynamicMatrix, throws_when_set_element_with_too_large_index)
@@ -80,8 +83,12 @@ TEST(TDynamicMatrix, throws_when_set_element_with_too_large_index)
 TEST(TDynamicMatrix, can_assign_matrix_to_itself)
 {
 	TDynamicMatrix<int> m(5);
+	m[0][0] = 1;
+	TDynamicMatrix<int> mcpy(m);
 
-	ASSERT_NO_THROW(m = m);
+	m = m;
+
+	EXPECT_EQ(m, mcpy);
 }
 
 TEST(TDynamicMatrix, can_assign_matrices_of_equal_size)
@@ -108,9 +115,13 @@ TEST(TDynamicMatrix, assign_operator_change_matrix_size)
 TEST(TDynamicMatrix, can_assign_matrices_of_different_size)
 {
 	TDynamicMatrix<int> m1(5);
+	m1[0][0] = 1;
 	TDynamicMatrix<int> m2(3);
+	m2[0][0] = 2;
 
-	EXPECT_NE(m1, m2);
+	m1 = m2;
+
+	EXPECT_EQ(m1, m2);
 }
 
 TEST(TDynamicMatrix, compare_equal_matrices_return_true)
@@ -144,10 +155,21 @@ TEST(TDynamicMatrix, can_add_matrices_with_equal_size)
 	TDynamicMatrix<int> m2(5);
 	m1[0][0] = 1;
 	m1[1][1] = 1;
+	m2[0][0] = 1;
+	m2[1][4] = 1;
+	int* arr1 = new int[5] { 2, 0, 0, 0, 0 };
+	int* arr2 = new int[5] { 0, 1, 0, 0, 1 };
+	TDynamicVector<int> v1(arr1, 5);
+	TDynamicVector<int> v2(arr2, 5);
+	delete[] arr1;
+	delete[] arr2;
+	TDynamicMatrix<int> res(5);
+	res[0] = v1;
+	res[1] = v2;
 
 	m2 = m1 + m2;
 
-	EXPECT_EQ(m1, m2);
+	EXPECT_EQ(m2, res);
 }
 
 TEST(TDynamicMatrix, cant_add_matrices_with_not_equal_size)
@@ -162,11 +184,19 @@ TEST(TDynamicMatrix, can_subtract_matrices_with_equal_size)
 {
 	TDynamicMatrix<int> m1(5);
 	TDynamicMatrix<int> m2(5);
-	TDynamicMatrix<int> res(5);
+	m1[0][0] = 1;
+	m1[1][1] = 1;
 	m2[0][0] = 1;
-	m2[1][1] = 1;
-	res[0][0] = -1;
-	res[1][1] = -1;
+	m2[1][4] = 1;
+	int* arr1 = new int[5] { 0, 0, 0, 0, 0 };
+	int* arr2 = new int[5] { 0, 1, 0, 0, -1 };
+	TDynamicVector<int> v1(arr1, 5);
+	TDynamicVector<int> v2(arr2, 5);
+	delete[] arr1;
+	delete[] arr2;
+	TDynamicMatrix<int> res(5);
+	res[0] = v1;
+	res[1] = v2;
 
 	m1 = m1 - m2;
 
