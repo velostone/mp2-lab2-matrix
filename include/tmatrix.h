@@ -26,7 +26,7 @@ protected:
 public:
   TDynamicVector(size_t size = 1) : sz(size)
   {
-    if (sz == 0 || sz > MAX_VECTOR_SIZE)
+    if (sz < 1 || sz > MAX_VECTOR_SIZE)
       throw length_error("Vector size should be greater than zero and less than MAX_VECTOR_SIZE");
     pMem = new T[sz]();// {}; // У типа T д.б. конструктор по умолчанию
   }
