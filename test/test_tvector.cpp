@@ -154,21 +154,21 @@ TYPED_TEST(TestTVector, vectors_with_different_size_are_not_equal)
 
 TYPED_TEST(TestTVector, can_add_scalar_to_vector)
 {
-	this -> CreateVectorRes(add_scal, 5);
+	this -> CreateVectorRes(this->add_scal, 5);
 	*(this->v1) = *(this->v1) + 5;
 	EXPECT_EQ(*(this->v1), *(this->v_test));
 }
 
 TYPED_TEST(TestTVector, can_subtract_scalar_from_vector)
 {
-	this -> CreateVectorRes(sub_scal, 5);
+	this -> CreateVectorRes(this->sub_scal, 5);
 	*(this->v1) = *(this->v1) - 5;
 	EXPECT_EQ(*(this->v1), *(this->v_test));
 }
 
 TYPED_TEST(TestTVector, can_multiply_scalar_by_vector)
 {
-	this -> CreateVectorRes(mult_scal, 5);
+	this -> CreateVectorRes(this->mult_scal, 5);
 	EXPECT_EQ(*(this->v1) * 2, *(this->v_test));
 }
 
